@@ -1,0 +1,15 @@
+{
+  "name": "machamp",
+  "version": "0.1.0",
+  "description": "A secure package for running sudo commands",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shelby McCowan",
+  "license": "ISC",
+  "dependencies": {
+    "bullmq": "^1.40.0",
+    "child-process-async": "^1.0.1"
+  }
+}
