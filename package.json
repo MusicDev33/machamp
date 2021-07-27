@@ -4,12 +4,20 @@
   "description": "A secure package for running sudo commands",
   "main": "index.js",
   "scripts": {
+    "start": "ts-node-dev src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Shelby McCowan",
   "license": "ISC",
   "dependencies": {
+    "@types/amqplib": "^0.8.1",
+    "amqplib": "^0.8.0",
     "bullmq": "^1.40.0",
-    "child-process-async": "^1.0.1"
+    "child-process-async": "^1.0.1",
+    "tsconfig-paths": "^3.10.1"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.3.5"
   }
 }
