@@ -3,6 +3,7 @@ require('tsconfig-paths/register');
 import amq from 'amqplib';
 
 import { updateSysDeps } from '@jobs/update.job';
+import { parseMessage } from './parser';
 
 (async () => {
   let connection: amq.Connection;
@@ -45,12 +46,13 @@ import { updateSysDeps } from '@jobs/update.job';
     }
 
     const parsedMsg = msg.content.toString().split(':');
-    const results = await updateSysDeps(parsedMsg[1]);
+    // const results = await updateSysDeps(parsedMsg[1]);
+    await parseMessage(msg.content.toString());
     channel.ack(msg);
     console.log(`Message received - '${msg.content.toString()}'`)
   }, {
     noAck: false
-  })
+  });
 })();
 
 setInterval(() => {}, 1 << 30);

@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node-dev src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test1": "ts-node-dev src/parser.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev:receive": "ts-node-dev src/index.ts",
+    "dev:send": "ts-node-dev src/testpush.ts"
   },
   "author": "Shelby McCowan",
   "license": "ISC",
