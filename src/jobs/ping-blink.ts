@@ -16,7 +16,10 @@ export const pingBlink = async () => {
   }
 
   for (let i = 0; i < 10; i++) {
-    await timer.setTimeout(250);
+    await timer.setTimeout(50);
     await exec(`echo 1 | tee ${ledPath}`);
+
+    await timer.setTimeout(50);
+    await exec(`echo 0 | tee ${ledPath}`);
   }
 }
