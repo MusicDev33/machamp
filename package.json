@@ -4,7 +4,7 @@
   "description": "A secure package for running sudo commands",
   "main": "index.js",
   "scripts": {
-    "start": "sudo ts-node src/index.ts NODE_ENV=production",
+    "start": "ts-node src/index.ts NODE_ENV=production",
     "test1": "ts-node-dev src/parser.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:receive": "ts-node-dev src/index.ts",
@@ -17,6 +17,7 @@
     "amqplib": "^0.8.0",
     "bullmq": "^1.40.0",
     "child-process-async": "^1.0.1",
+    "dotenv": "^10.0.0",
     "ts-node": "^10.2.1",
     "tsconfig-paths": "^3.10.1"
   },
