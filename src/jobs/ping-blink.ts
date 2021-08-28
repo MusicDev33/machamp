@@ -14,8 +14,6 @@ export const pingBlink = async () => {
     console.log('Current hardware does not support changing onboard LEDs');
     return;
   }
-  
-  return;
 
   for (let i = 0; i < 10; i++) {
     await timer.setTimeout(250);
