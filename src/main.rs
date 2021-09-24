@@ -1,11 +1,10 @@
 use tokio_amqp::*;
 use lapin::{
-  Connection, ConnectionProperties, Result, BasicProperties, types::FieldTable, options::*
+  Connection, ConnectionProperties, types::FieldTable, options::*
 };
 use std::sync::Arc;
 use tokio::runtime::Runtime;
 use futures_util::stream::StreamExt;
-use std::future::Future;
 
 async fn tokio_main(rt: Arc<Runtime>) {
   let url = "amqp://localhost";
@@ -18,7 +17,8 @@ async fn tokio_main(rt: Arc<Runtime>) {
 
   while let Some(delivery) = consumer.next().await {
     let (_, delivery) = delivery.expect("Error in consumption");
-    println!("Delivered");
+    
+    println!("{:?}", std::str::from_utf8(&delivery.data).unwrap());
 
     delivery.ack(BasicAckOptions::default()).await.unwrap();
   }
