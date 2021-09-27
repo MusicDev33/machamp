@@ -35,6 +35,6 @@ export const parseMessage = async (msg: string) => {
   }
 
   if (task === 'pingblink') {
-    await pingBlink();
+    // await pingBlink();
   }
 }
