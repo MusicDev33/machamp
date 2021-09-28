@@ -38,7 +38,7 @@ async fn tokio_main(rt: Arc<Runtime>) {
     }
 
     for _ in 0..10 {
-      let interval = Duration::from_millis(15);
+      let interval = Duration::from_millis(30);
       sleep(interval).await;
       let mut file = OpenOptions::new().write(true).truncate(true).open(filePath).unwrap();
       file.write_all(b"1").expect("Could not write to brightness file.");
@@ -50,7 +50,7 @@ async fn tokio_main(rt: Arc<Runtime>) {
     }
 
     for _ in 0..6 {
-      let interval = Duration::from_millis(50);
+      let interval = Duration::from_millis(60);
       sleep(interval).await;
       let mut file = OpenOptions::new().write(true).truncate(true).open(filePath).unwrap();
       file.write_all(b"1").expect("Could not write to brightness file.");
