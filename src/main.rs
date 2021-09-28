@@ -18,7 +18,7 @@ async fn tokio_main(rt: Arc<Runtime>) {
   let connection = Connection::connect(&url, ConnectionProperties::default().with_tokio()).await.unwrap();
 
   let channel = connection.create_channel().await.unwrap();
-  println!("Done");
+  println!("amq online.");
 
   let mut consumer = channel.basic_consume("machamp", "consumer1", BasicConsumeOptions::default(), FieldTable::default()).await.unwrap();
 
