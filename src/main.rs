@@ -34,7 +34,7 @@ async fn tokio_main(rt: Arc<Runtime>) {
     let fileExists = Path::new(filePath).exists();
 
     if !fileExists {
-      break;
+      continue;
     }
 
     for _ in 0..10 {
