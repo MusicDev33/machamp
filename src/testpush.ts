@@ -1,5 +1,7 @@
 import amq from 'amqplib';
 
+const message = 'machamp:mongo:start';
+
 (async () => {
   let connection: amq.Connection;
 
@@ -31,7 +33,5 @@ import amq from 'amqplib';
 
   console.log(`Queue '${queue}' listening.`);
 
-  const msg = 'machamp:sys:pingblink';
-
-  channel.sendToQueue(queue, Buffer.from(msg));
+  channel.sendToQueue(queue, Buffer.from(message));
 })()

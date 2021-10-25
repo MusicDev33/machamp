@@ -1,6 +1,6 @@
 require('tsconfig-paths/register');
 import { updateSysDeps } from '@jobs/update.job';
-import { pingBlink } from '@jobs/ping-blink';
+import { startMongo, stopMongo } from '@jobs/start.job';
 
 export const parseMessage = async (msg: string) => {
 
@@ -29,6 +29,20 @@ export const parseMessage = async (msg: string) => {
 
     console.log(params);
   }
+
+  // Probably about time to create a dictionary of sorts for this.
+
+  if (system === 'mongo') {
+    if (task === 'start') {
+      startMongo();
+    }
+
+    if (task === 'stop') {
+      stopMongo();
+    }
+  }
+
+
 
   if (task === 'sysupdate') {
     updateSysDeps(msg);
