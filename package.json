@@ -7,22 +7,21 @@
     "start": "ts-node src/index.ts NODE_ENV=production",
     "test1": "ts-node-dev src/parser.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:receive": "ts-node-dev src/index.ts",
+    "dev:rec": "ts-node-dev src/index.ts",
     "dev:send": "ts-node-dev src/testpush.ts"
   },
   "author": "Shelby McCowan",
   "license": "ISC",
   "dependencies": {
-    "@types/amqplib": "^0.8.1",
+    "@types/amqplib": "^0.8.2",
     "amqplib": "^0.8.0",
-    "bullmq": "^1.40.0",
     "child-process-async": "^1.0.1",
     "dotenv": "^10.0.0",
-    "ts-node": "^10.2.1",
-    "tsconfig-paths": "^3.10.1"
+    "ts-node": "^10.4.0",
+    "tsconfig-paths": "^3.11.0",
+    "typescript": "^4.4.4"
   },
   "devDependencies": {
-    "ts-node-dev": "^1.1.8",
-    "typescript": "^4.3.5"
+    "ts-node-dev": "^1.1.8"
   }
 }

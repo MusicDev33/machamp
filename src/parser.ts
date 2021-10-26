@@ -42,7 +42,15 @@ export const parseMessage = async (msg: string) => {
     }
   }
 
+  if (system === 'redis') {
+    if (task === 'start') {
+      startMongo();
+    }
 
+    if (task === 'stop') {
+      stopMongo();
+    }
+  }
 
   if (task === 'sysupdate') {
     updateSysDeps(msg);

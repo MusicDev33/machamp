@@ -1,16 +1,20 @@
 // eslint:disable-next-line
 require('tsconfig-paths/register');
 import amq from 'amqplib';
+import { initialize } from 'init';
 
 import { updateSysDeps } from '@jobs/update.job';
 import { parseMessage } from './parser';
 
 (async () => {
+  await initialize();
+
   let connection: amq.Connection;
 
   try {
     connection = await amq.connect('amqp://localhost');
   } catch (e) {
+    // Check if RabbitMQ is running
     console.log(e);
     process.exit(1);
 
