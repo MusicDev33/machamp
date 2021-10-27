@@ -1,16 +1,19 @@
 interface Aliases {
-  mongo: string
+  mongo: string,
+  redis: string
 }
 
 let aliases: Aliases;
 
 if (process.platform === 'darwin') {
   aliases = {
-    mongo: 'mongodb-community'
+    mongo: 'mongodb-community',
+    redis: 'redis'
   }
 } else {
   aliases = {
-    mongo: 'mongod'
+    mongo: 'mongod',
+    redis: 'redis-server'
   }
 }
 

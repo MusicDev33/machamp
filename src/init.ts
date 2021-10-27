@@ -9,14 +9,33 @@ import Aliases from 'commands/aliases';
 export const initialize = async () => {
   // Check if Redis is running. RabbitMQ needs Redis to run first.
 
-  const { stdout: responseOutput, stderr } = await exec(`redis-cli ping`);
+  let redisPingResults: {stdout: string, stderr: string};
 
-  if (responseOutput.trim() !== 'PONG') {
-    console.log('Redis is offline...');
-    return false;
+  try {
+    redisPingResults = await exec('redis-cli ping');
+  } catch (e) {
+    console.log('Redis ping failed, checking status...');
+  
+    // Attempt to get Redis back up and running
+    const redisStatus = await Commands.serviceStatus(Aliases.redis);
+    const redisIsUp = redisStatus.status == 'online' ? true : false;
+
+    if (!redisIsUp) {
+      console.log('Redis appears to be down, trying to start it back up...\n');
+      const startRedisOutput = await Commands.serviceStart(Aliases.redis);
+      console.log(startRedisOutput.stdout);
+    }
+
+    try {
+      console.log('Attempting to ping Redis again...\n');
+      redisPingResults = await exec('redis-cli ping');
+    } catch (e2) {
+      console.log(e2);
+      process.exit(1);
+    }
   }
 
-  console.log('Redis is online!');
+  console.log('Redis is online!\n');
 
   try {
     let connection = await amq.connect('amqp://localhost');
@@ -34,5 +53,5 @@ export const initialize = async () => {
 }
 
 const fixRedis = async () => {
-  
+
 }

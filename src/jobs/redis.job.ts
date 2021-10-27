@@ -14,3 +14,7 @@ export const stopMongo = async () => {
 
   console.log(serviceOutput);
 }
+
+export const getRedisStatus = async () => {
+
+}
