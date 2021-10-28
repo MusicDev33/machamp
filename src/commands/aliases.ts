@@ -1,6 +1,7 @@
 interface Aliases {
   mongo: string,
-  redis: string
+  redis: string,
+  rabbitmq: string
 }
 
 let aliases: Aliases;
@@ -8,12 +9,14 @@ let aliases: Aliases;
 if (process.platform === 'darwin') {
   aliases = {
     mongo: 'mongodb-community',
-    redis: 'redis'
+    redis: 'redis',
+    rabbitmq: 'rabbitmq'
   }
 } else {
   aliases = {
     mongo: 'mongod',
-    redis: 'redis-server'
+    redis: 'redis-server',
+    rabbitmq: 'rabbitmq-server'
   }
 }
 

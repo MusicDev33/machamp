@@ -38,7 +38,8 @@ export const initialize = async () => {
     }
   }
 
-  console.log('Redis is online!\n');
+  console.log('Redis is online!');
+  console.log('Attempting RaabitMQ connection now.\n');
 
   try {
     let connection = await amq.connect('amqp://localhost');
@@ -48,6 +49,37 @@ export const initialize = async () => {
     console.log('Test connection closed.');
   } catch (e) {
     // Check if RabbitMQ is running
+    let rabbitMqStatus = await Commands.serviceStatus(Aliases.rabbitmq);
+
+    if (rabbitMqStatus.status !== 'online') {
+      console.log('\nIt appears RabbitMQ is offline...let me try to fix that.');
+      await Commands.serviceStart(Aliases.rabbitmq);
+
+      console.log('I started RabbitMQ back up. Let me check its status.');
+      rabbitMqStatus = await Commands.serviceStatus(Aliases.rabbitmq);
+
+      if (rabbitMqStatus.status === 'online') {
+        console.log('RabbitMQ has been started, waiting for 15 seconds for port 5672 to open...');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('10 seconds...');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('5 seconds...');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        console.log('Finished waiting.\n');
+      }
+    }
+  }
+
+  console.log('Attempting RabbitMQ connection again.');
+
+  try {
+    let connection = await amq.connect('amqp://localhost');
+    console.log('Successfully connected to RabbitMQ. Closing test connection...');
+
+    await connection.close();
+    console.log('Test connection closed.\n');
+  } catch (e) {
+    // Fail if everything else doesn't work
     console.log(e);
     process.exit(1);
   }
