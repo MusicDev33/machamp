@@ -28,6 +28,9 @@ export const initialize = async () => {
 
     try {
       console.log('Attempting to ping Redis again...\n');
+      // The ping happens too quickly after Redis starts, so here we are...
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
       redisPingResults = await exec('redis-cli ping');
     } catch (e2) {
       console.log(e2);
