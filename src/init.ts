@@ -47,6 +47,8 @@ export const initialize = async () => {
 
     await connection.close();
     console.log('Test connection closed.');
+
+    return true;
   } catch (e) {
     // Check if RabbitMQ is running
     let rabbitMqStatus = await Commands.serviceStatus(Aliases.rabbitmq);
