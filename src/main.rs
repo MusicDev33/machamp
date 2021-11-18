@@ -4,11 +4,16 @@ use lapin::{
 };
 use futures_util::stream::StreamExt;
 
+mod init;
+
 mod jobs;
+mod commands;
 
 #[tokio::main]
 async fn main() {
-  connect().await;
+  init::initialize();
+
+  // connect().await;
 }
 
 async fn connect() {
