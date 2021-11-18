@@ -22,25 +22,25 @@ impl Commands {
   }
 
   pub fn service_start(service: &str) -> Command {
-    let mut command = format!("{} start {}", Commands::command_prefix(), &service);
+    let command = format!("{} start {}", Commands::command_prefix(), &service);
 
     Command::new(command)
   }
 
   pub fn service_stop(service: &str) -> Command {
-    let mut command = format!("{} stop {}", Commands::command_prefix(), &service);
+    let command = format!("{} stop {}", Commands::command_prefix(), &service);
 
     Command::new(command)
   }
 
   pub fn service_restart(service: &str) -> Command {
-    let mut command = format!("{} restart {}", Commands::command_prefix(), &service);
+    let command = format!("{} restart {}", Commands::command_prefix(), &service);
 
     Command::new(command)
   }
 
   pub fn service_status(service: &str) -> SysService {
-    let mut command = format!("{} status {}", Commands::command_prefix(), &service);
+    let command = format!("{} status {}", Commands::command_prefix(), &service);
 
     let mut command_get_status = "grep Active".to_owned();
 
