@@ -1,8 +1,24 @@
 use std::process::Command;
+
 #[path = "system/mod.rs"]
 mod system;
+use system::commands::Commands;
 
 pub fn initialize() {
+  let mut redis_attempts = 0;
+
+  redis_check(&mut redis_attempts);
+}
+
+// MARK: Redis Stuff
+fn redis_check(attempts: &mut i32) {
+  *attempts += 1;
+  println!("Attempts to restart Redis: {}", attempts);
+
+  if *attempts > 10 {
+    panic!("Tried to restart Redis more than 10 times, I'm just gonna stop bro.");
+  }
+
   let stdout = Command::new("redis-cli").args(["ping"]).output();
 
   let redis_result = match stdout {
@@ -22,7 +38,7 @@ pub fn initialize() {
 
   if !redis_result {
     println!("dead");
-    redis_start();
+    redis_start(attempts);
   }
 
   if redis_result {
@@ -30,9 +46,17 @@ pub fn initialize() {
   }
 }
 
-fn redis_start() {
+// Passing down the mutability like this feels like...not right?
+fn redis_start(attempts: &mut i32) {
   let aliases = system::aliases::Aliases { ..Default::default() };
   println!("{:?}", aliases.mongo);
-  // Okay maybe I did something wrong here...
-  let test = system::commands::Commands::service_start(&aliases.mongo.to_string()).expect("Starting Redis failed for some reason");
+
+  match Commands::service_start(&aliases.redis.to_string()) {
+    Ok(_) => println!("Successfully started Redis."),
+    Err(error) => {
+      panic!("Problem starting Redis: {:?}", error);
+    }
+  };
+
+  redis_check(attempts);
 }
