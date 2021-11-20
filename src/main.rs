@@ -7,7 +7,6 @@ use futures_util::stream::StreamExt;
 mod init;
 
 mod jobs;
-mod commands;
 
 #[tokio::main]
 async fn main() {

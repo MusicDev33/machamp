@@ -1,4 +1,10 @@
 use std::process::Command;
+use std::io;
+use std::process::Output;
+
+#[path = "mcommand.rs"]
+mod mcommand;
+
 pub struct Commands;
 
 enum Status {
@@ -21,10 +27,10 @@ impl Commands {
     return "sudo systemctl".to_owned()
   }
 
-  pub fn service_start(service: &str) -> Command {
-    let command = format!("{} start {}", Commands::command_prefix(), &service);
+  pub fn service_start(service: &str) -> io::Result<Output> {
+    let command = format!("{} start {}", Commands::command_prefix(), service);
 
-    Command::new(command)
+    mcommand::MCommand::new(command.as_str())
   }
 
   pub fn service_stop(service: &str) -> Command {
