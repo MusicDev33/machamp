@@ -3,6 +3,7 @@ use lapin::{
 };
 
 use std::process::Command;
+use std::{thread, time};
 
 #[path = "system/mod.rs"]
 mod system;
@@ -10,10 +11,9 @@ use system::commands::Commands;
 
 pub async fn initialize() {
   let mut redis_attempts = 0;
-  let mut rabbit_attempts = 0;
 
   redis_check(&mut redis_attempts);
-  rabbitmq_check(&mut rabbit_attempts).await;
+  rabbitmq_check().await;
 }
 
 // MARK: Redis Stuff
@@ -68,13 +68,7 @@ fn redis_start(attempts: &mut i32) {
 
 // MARK: RabbitMQ Stuff
 
-async fn rabbitmq_check(attempts: &mut i32) {
-  *attempts += 1;
-  println!("Attempts to restart RabbitMQ: {}", attempts);
-
-  if *attempts > 10 {
-    panic!("Tried to restart RabbitMQ more than 10 times, I'm just gonna stop bro.");
-  }
+async fn rabbitmq_check() {
 
   let addr = "amqp://127.0.0.1:5672";
 
@@ -83,13 +77,25 @@ async fn rabbitmq_check(attempts: &mut i32) {
     Err(_) => false
   };
 
+  // I've got two options: Figure out how to do recursive async functions in Rust or literally anything else.
+  // I picked literally anything else so this code's gonna be ugly...
+
   if rabbitmq_online {
     println!("RabbitMQ appears to online.");
   }
 
+  // TODO: Use child process in order to wait until the command is actually finished instead of just using timers
   if !rabbitmq_online {
     println!("RabbitMQ appears to be offline, restarting...");
     rabbitmq_start();
+    println!("Reconnecting to RabbitMQ...");
+
+    thread::sleep(time::Duration::from_secs(15));
+
+    match Connection::connect(&addr, ConnectionProperties::default()).await {
+      Ok(_) => println!("Looks like RabbitMQ is up and running!"),
+      Err(err) => panic!("I could not start RabbitMQ. Here's the error, hoss: {}", err)
+    };
   }
 }
 
