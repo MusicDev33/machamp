@@ -10,7 +10,7 @@ mod jobs;
 
 #[tokio::main]
 async fn main() {
-  init::initialize();
+  init::initialize().await;
 
   // connect().await;
 }

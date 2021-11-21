@@ -1,13 +1,19 @@
+use lapin::{
+  Connection, ConnectionProperties,
+};
+
 use std::process::Command;
 
 #[path = "system/mod.rs"]
 mod system;
 use system::commands::Commands;
 
-pub fn initialize() {
+pub async fn initialize() {
   let mut redis_attempts = 0;
+  let mut rabbit_attempts = 0;
 
   redis_check(&mut redis_attempts);
+  rabbitmq_check(&mut rabbit_attempts).await;
 }
 
 // MARK: Redis Stuff
@@ -37,19 +43,18 @@ fn redis_check(attempts: &mut i32) {
   };
 
   if !redis_result {
-    println!("dead");
+    println!("Redis appears to be offline, let me try to do something about that...");
     redis_start(attempts);
   }
 
   if redis_result {
-    println!("alive");
+    println!("Redis is online and ready to go");
   }
 }
 
 // Passing down the mutability like this feels like...not right?
 fn redis_start(attempts: &mut i32) {
   let aliases = system::aliases::Aliases { ..Default::default() };
-  println!("{:?}", aliases.mongo);
 
   match Commands::service_start(&aliases.redis.to_string()) {
     Ok(_) => println!("Successfully started Redis."),
@@ -59,4 +64,42 @@ fn redis_start(attempts: &mut i32) {
   };
 
   redis_check(attempts);
+}
+
+// MARK: RabbitMQ Stuff
+
+async fn rabbitmq_check(attempts: &mut i32) {
+  *attempts += 1;
+  println!("Attempts to restart RabbitMQ: {}", attempts);
+
+  if *attempts > 10 {
+    panic!("Tried to restart RabbitMQ more than 10 times, I'm just gonna stop bro.");
+  }
+
+  let addr = "amqp://127.0.0.1:5672";
+
+  let rabbitmq_online = match Connection::connect(&addr, ConnectionProperties::default()).await {
+    Ok(_) => true,
+    Err(_) => false
+  };
+
+  if rabbitmq_online {
+    println!("RabbitMQ appears to online.");
+  }
+
+  if !rabbitmq_online {
+    println!("RabbitMQ appears to be offline, restarting...");
+    rabbitmq_start();
+  }
+}
+
+fn rabbitmq_start() {
+  let aliases = system::aliases::Aliases { ..Default::default() };
+
+  match Commands::service_start(&aliases.rabbitmq.to_string()) {
+    Ok(_) => println!("Successfully started RabbitMQ."),
+    Err(error) => {
+      panic!("Problem starting RabbitMQ: {:?}", error);
+    }
+  };
 }
