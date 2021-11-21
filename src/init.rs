@@ -48,7 +48,7 @@ fn redis_check(attempts: &mut i32) {
   }
 
   if redis_result {
-    println!("Redis is online and ready to go");
+    println!("Redis is online and ready to go\n");
   }
 }
 
@@ -57,7 +57,7 @@ fn redis_start(attempts: &mut i32) {
   let aliases = system::aliases::Aliases { ..Default::default() };
 
   match Commands::service_start(&aliases.redis.to_string()) {
-    Ok(_) => println!("Successfully started Redis."),
+    Ok(_) => println!("Successfully started Redis.\n"),
     Err(error) => {
       panic!("Problem starting Redis: {:?}", error);
     }
@@ -81,7 +81,7 @@ async fn rabbitmq_check() {
   // I picked literally anything else so this code's gonna be ugly...
 
   if rabbitmq_online {
-    println!("RabbitMQ appears to online.");
+    println!("RabbitMQ appears to be online.");
   }
 
   // TODO: Use child process in order to wait until the command is actually finished instead of just using timers
@@ -93,7 +93,7 @@ async fn rabbitmq_check() {
     thread::sleep(time::Duration::from_secs(15));
 
     match Connection::connect(&addr, ConnectionProperties::default()).await {
-      Ok(_) => println!("Looks like RabbitMQ is up and running!"),
+      Ok(_) => println!("Looks like RabbitMQ is up and running!\n"),
       Err(err) => panic!("I could not start RabbitMQ. Here's the error, hoss: {}", err)
     };
   }
@@ -103,7 +103,7 @@ fn rabbitmq_start() {
   let aliases = system::aliases::Aliases { ..Default::default() };
 
   match Commands::service_start(&aliases.rabbitmq.to_string()) {
-    Ok(_) => println!("Successfully started RabbitMQ."),
+    Ok(_) => println!("Successfully started RabbitMQ.\n"),
     Err(error) => {
       panic!("Problem starting RabbitMQ: {:?}", error);
     }
